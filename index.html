@@ -165,89 +165,53 @@
 
 <script>
 const THEMES = {
-  "Pour briser la glace": [
-    "Quelle est la dernière chose qui t'a fait vraiment rire ?",
-    "Si tu pouvais manger un seul plat pour le reste de ta vie, lequel ce serait ?",
-    "Tu es plutôt lève-tôt ou couche-tard ?",
-    "Quelle chanson tu pourrais écouter en boucle sans t'en lasser ?",
-    "Quel est ton endroit préféré dans ta ville ?",
-    "Si tu avais une journée entière sans aucune obligation, tu ferais quoi ?",
-    "Quel talent inutile est-ce que tu as ?",
-    "Tu préfères la mer ou la montagne ? Pourquoi ?",
-    "Quel est le dernier film ou la dernière série que tu as adoré ?",
-    "Quelle appli tu ouvres le plus souvent sur ton téléphone ?",
-    "Si tu pouvais avoir un super-pouvoir, lequel choisirais-tu ?",
-    "Quel est ton petit plaisir du quotidien ?",
-    "Chats, chiens, ou aucun des deux ?",
-    "Quel métier rêvais-tu de faire quand tu étais petit·e ?",
-    "Quel est le meilleur cadeau que tu aies jamais reçu ?"
+  "Pour commencer": [
+    "C'était quand, ton dernier fou rire ?",
+    "T'es du genre à te lever direct ou à snoozer ton réveil ?",
+    "Quelle musique tu écoutes en cachette, celle que tu n'assumes pas trop ?",
+    "C'est quoi ta routine du matin ?",
+    "Quelle émission ou quel film tu regardes, mais sans trop l'assumer ?",
+    "C'est quoi ton unpopular opinion ?",
+    "Quelle mode tu regrettes d'avoir suivie ?",
+    "Si tu ne savais rien de moi, quel métier tu m'aurais donné ?",
+    "T'étais comment au collège ?",
+    "C'est quoi le truc le plus bizarre que tu fais quand personne ne te regarde ?",
+    "Est-ce que t'as un talent complètement inutile ?",
+    "C'est quoi la pire coupe de cheveux que t'aies eue ?",
+    "C'est quoi le dernier truc que t'as acheté et que tu regrettes ?",
+    "Plutôt couche-tard ou lève-tôt ?"
   ],
-  "Souvenirs": [
-    "Quel est ton plus beau souvenir d'enfance ?",
-    "Quel voyage t'a le plus marqué·e ?",
-    "Raconte-moi un moment où tu as eu très peur.",
-    "Quelle est la plus grosse bêtise que tu aies faite enfant ?",
-    "Quel prof ou quelle personne t'a vraiment influencé·e en grandissant ?",
-    "Quel est le meilleur repas que tu aies jamais mangé, et avec qui ?",
-    "Quelle période de ta vie aimerais-tu revivre ?",
-    "Quel livre, film ou chanson a compté à un moment précis de ta vie ?",
-    "Quelle tradition familiale tu aimes le plus ?",
-    "Quel est ton souvenir le plus drôle avec un·e ami·e ?",
-    "Quelle a été ta première grande fierté ?",
-    "Y a-t-il une odeur qui te ramène immédiatement quelque part ?"
+  "Et si…": [
+    "Si tu étais obligée de participer à une téléréalité, tu choisirais laquelle ?",
+    "Si tu devais manger le même plat toute ta vie, ce serait lequel ?",
+    "Si tu pouvais supprimer une invention de l'histoire, ce serait laquelle ?",
+    "Tu pars sur une île déserte avec trois objets. Lesquels ?",
+    "Si ta vie était un film, quel en serait le titre ?",
+    "Tu as une machine à voyager dans le temps. Tu vas où, et tu fais quoi ?",
+    "Ta maison brûle et tout le monde est en sécurité. Quel objet tu sauves ?",
+    "S'il ne te restait qu'une journée à vivre, tu ferais quoi ?",
+    "Demain tu gagnes 10 millions. C'est quoi la première chose que tu fais ?"
   ],
-  "Qui tu es": [
-    "Qu'est-ce que les gens se trompent souvent à ton sujet ?",
-    "Comment tes ami·es proches te décriraient en trois mots ?",
-    "Qu'est-ce qui te donne de l'énergie, et qu'est-ce qui t'en enlève ?",
-    "De quoi es-tu le plus fier ou la plus fière aujourd'hui ?",
-    "Qu'est-ce qui te met en colère plus que ça ne devrait ?",
-    "Comment tu te ressources après une semaine difficile ?",
-    "Tu es plutôt du genre à planifier ou à improviser ?",
-    "Quelle qualité tu admires le plus chez les autres ?",
-    "Quel défaut tu essaies de corriger chez toi ?",
-    "Qu'est-ce qui te rend vraiment heureux ou heureuse ?",
-    "Dans quelle situation tu te sens le plus toi-même ?",
-    "Quelle est une opinion que tu as et que peu de gens partagent ?",
-    "Comment montres-tu aux gens que tu tiens à eux ?"
+  "Ta personnalité": [
+    "C'est quoi ta pire honte ?",
+    "C'est quoi ton plus gros défaut ?",
+    "Qu'est-ce qui te met vraiment en colère ?",
+    "Pour toi, c'est quoi la meilleure activité à faire en date ?",
+    "Ton plus gros red flag chez quelqu'un ? Et ton green flag ?",
+    "C'est quoi ton pire date ?",
+    "Tu es plutôt attirée par les gens qui te ressemblent, ou par ton opposé ?",
+    "C'est quoi la chanson qui te met tout de suite dans un bon mood ?"
   ],
   "Plus profond": [
-    "Qu'est-ce qui compte le plus pour toi dans la vie ?",
-    "Quelle est la meilleure décision que tu aies prise ?",
-    "Y a-t-il quelque chose que tu regrettes de ne pas avoir fait ?",
-    "Qu'est-ce qui t'a fait changer d'avis sur quelque chose d'important ?",
-    "De quoi as-tu peur, vraiment ?",
-    "Quelle leçon as-tu apprise à la dure ?",
-    "Qu'est-ce que tu aimerais dire à toi-même il y a dix ans ?",
-    "Qu'est-ce que l'amitié veut dire pour toi ?",
-    "Quand t'es-tu senti·e le plus seul·e, et qu'est-ce qui t'a aidé·e ?",
-    "Qu'est-ce que tu voudrais que les gens retiennent de toi ?",
-    "Quelle épreuve t'a rendu·e plus fort·e ?",
-    "Qu'est-ce qui te fait te sentir en sécurité ?"
-  ],
-  "Rêves et projets": [
-    "Où te vois-tu dans cinq ans ?",
-    "Si l'argent n'était pas un problème, que ferais-tu de ta vie ?",
-    "Quel pays rêves-tu de visiter, et pourquoi celui-là ?",
-    "Qu'est-ce que tu aimerais apprendre cette année ?",
-    "Quel projet te trotte dans la tête depuis longtemps ?",
-    "À quoi ressemblerait ta journée idéale dans dix ans ?",
-    "Y a-t-il une cause qui te tient particulièrement à cœur ?",
-    "Si tu pouvais changer une chose dans le monde, ce serait quoi ?",
-    "Quel est un petit objectif que tu aimerais atteindre ce mois-ci ?",
-    "Qu'est-ce que tu n'as jamais osé essayer, mais qui te tente ?"
-  ],
-  "Imagine…": [
-    "Tu peux dîner avec n'importe qui, vivant ou non. Qui choisis-tu ?",
-    "Tu peux vivre à n'importe quelle époque pendant un an. Laquelle ?",
-    "Ta vie devient un film : quel en est le titre ?",
-    "Tu dois partir sur une île déserte avec trois objets. Lesquels ?",
-    "Tu peux maîtriser instantanément une compétence. Laquelle ?",
-    "Tu gagnes un million d'euros demain. Quelle est la première chose que tu fais ?",
-    "Tu peux parler à ton toi de 80 ans. Que lui demandes-tu ?",
-    "Tu peux vivre une journée dans la peau de quelqu'un d'autre. Qui ?",
-    "Tu ouvres un petit commerce. Qu'est-ce que tu vends ?",
-    "Tu peux supprimer une invention de l'histoire. Laquelle ?"
+    "C'est quoi ton objectif dans la vie ?",
+    "C'est quoi tes plus grandes peurs dans la vie ?",
+    "Est-ce que tu as peur de vieillir ?",
+    "Tu penses être devenue la personne que tu imaginais quand tu étais petite ?",
+    "C'est quoi la dernière chose qui t'a fait pleurer ?",
+    "Si tu pouvais changer un truc chez toi, ce serait quoi ?",
+    "Est-ce qu'il y a quelque chose que tu regrettes de ne pas avoir fait ?",
+    "Si tu pouvais rencontrer ton toi du passé, tu lui dirais quoi ?",
+    "Tu peux parler à toi-même à 80 ans. Qu'est-ce que tu lui demandes ?"
   ]
 };
 
