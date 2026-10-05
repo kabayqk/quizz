@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123A3F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Questions">
+<title>Apprendre à se connaître</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #123A3F;
+    --bg-deep: #0D2C30;
+    --card: #FBF8F3;
+    --ink: #1D2B2D;
+    --muted: #5E6E70;
+    --accent: #E8B53A;
+    --accent-ink: #2A2005;
+    --on-bg: #E6EFEE;
+    --on-bg-muted: #9DB8B9;
+    --shadow: 0 30px 60px -20px rgba(0, 20, 22, .55);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B2427; --bg-deep: #071a1c; --card: #F2EEE6; --on-bg: #DCE8E7; --on-bg-muted: #86A3A4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B2427; --bg-deep: #071a1c; --card: #F2EEE6; --on-bg: #DCE8E7; --on-bg-muted: #86A3A4;
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; height: 100%; overflow: hidden;
+    background: radial-gradient(120% 90% at 50% 0%, var(--bg) 40%, var(--bg-deep) 100%);
+    background-color: var(--bg);
+    color: var(--on-bg);
+    font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex; flex-direction: column; align-items: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  header { text-align: center; width: 100%; max-width: 34rem; padding: 18px 20px 0; }
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.45rem, 6vw, 2.4rem); line-height: 1.1; margin: 0;
+    letter-spacing: -.01em;
+  }
+  header p { margin: 6px 0 0; color: var(--on-bg-muted); font-size: .95rem; line-height: 1.45; }
+
+  .filters {
+    display: flex; gap: 8px; width: 100%; max-width: 44rem;
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    padding: 16px 20px 4px; scroll-snap-type: x proximity;
+    flex-shrink: 0;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .chip {
+    font: inherit; font-size: .92rem; cursor: pointer; white-space: nowrap;
+    padding: 9px 15px; border-radius: 999px; flex-shrink: 0; scroll-snap-align: start;
+    border: 1px solid rgba(230, 239, 238, .25);
+    background: transparent; color: var(--on-bg);
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .chip[aria-pressed="true"] { background: var(--on-bg); color: var(--bg); border-color: var(--on-bg); }
+  @media (hover: hover) { .chip:hover { border-color: rgba(230, 239, 238, .6); } }
+
+  .stage {
+    position: relative; flex: 1 1 auto; min-height: 0;
+    width: calc(100% - 40px); max-width: 30rem; max-height: 34rem;
+    margin: 18px 0 14px;
+  }
+  .back, .card { position: absolute; inset: 0; border-radius: 24px; background: var(--card); }
+  .back { opacity: .18; }
+  .back.b1 { transform: rotate(-3deg) translateY(6px); }
+  .back.b2 { transform: rotate(2.5deg) translateY(10px); opacity: .1; }
+  .card {
+    box-shadow: var(--shadow); color: var(--ink);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 26px 24px; cursor: pointer; touch-action: pan-y; user-select: none;
+    -webkit-user-select: none; overflow: hidden;
+  }
+  .card .tag { font-size: .9rem; font-weight: 600; color: var(--muted); }
+  .card .q {
+    font-family: "Fraunces", Georgia, serif; font-weight: 400;
+    font-size: clamp(1.5rem, 6.6vw, 2.1rem); line-height: 1.27;
+    margin: 0; letter-spacing: -.005em;
+  }
+  .card .q.intro { color: var(--muted); font-style: italic; }
+  .card .count { font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .card.leave { animation: leave .32s cubic-bezier(.5,0,.75,0) forwards; }
+  .card.leave-right { animation: leaveR .32s cubic-bezier(.5,0,.75,0) forwards; }
+  .card.enter { animation: enter .4s cubic-bezier(.2,.8,.2,1); }
+  @keyframes leave { to { transform: translateX(-120%) rotate(-14deg); opacity: 0; } }
+  @keyframes leaveR { to { transform: translateX(120%) rotate(14deg); opacity: 0; } }
+  @keyframes enter { from { transform: translateY(18px) scale(.96); opacity: 0; } }
+
+  .actions {
+    display: flex; gap: 10px; align-items: center;
+    width: 100%; max-width: 30rem; padding: 0 20px 18px; flex-shrink: 0;
+  }
+  .btn {
+    font: inherit; font-weight: 600; cursor: pointer; border: 0;
+    border-radius: 999px; transition: transform .1s, background .15s;
+    min-height: 58px;
+  }
+  .btn:active { transform: scale(.97); }
+  .primary {
+    flex: 1; background: var(--accent); color: var(--accent-ink);
+    font-size: 1.12rem; padding: 0 24px;
+  }
+  .secondary {
+    width: 58px; flex-shrink: 0; background: transparent; color: var(--on-bg);
+    border: 1px solid rgba(230, 239, 238, .3); display: grid; place-items: center;
+  }
+  .secondary svg { width: 22px; height: 22px; }
+  .secondary:disabled { opacity: .3; cursor: default; }
+  @media (hover: hover) {
+    .primary:hover { background: #F2C553; }
+    .secondary:not(:disabled):hover { border-color: rgba(230, 239, 238, .7); }
+  }
+  .hint { margin: 0 0 14px; font-size: .82rem; color: var(--on-bg-muted); text-align: center; padding: 0 20px; flex-shrink: 0; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  @media (max-height: 640px) {
+    header p { display: none; }
+    .stage { margin: 12px 0 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card.leave, .card.leave-right, .card.enter { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Apprendre à se connaître</h1>
+    <p>Tirez une carte, posez la question, écoutez la réponse. Puis échangez les rôles.</p>
+  </header>
+
+  <div class="filters" role="group" aria-label="Choisir un thème" id="filters"></div>
+
+  <div class="stage">
+    <div class="back b2"></div>
+    <div class="back b1"></div>
+    <article class="card" id="card" aria-live="polite">
+      <span class="tag" id="tag">Prêts ?</span>
+      <p class="q intro" id="question">Appuyez sur le bouton pour tirer votre première question.</p>
+      <span class="count" id="count"></span>
+    </article>
+  </div>
+
+  <div class="actions">
+    <button class="btn secondary" id="prev" disabled aria-label="Question précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <button class="btn primary" id="next">Tirer une question</button>
+  </div>
+  <p class="hint" id="hint">Touchez la carte ou glissez-la vers la gauche pour changer de question.</p>
+
+<script>
+const THEMES = {
+  "Pour briser la glace": [
+    "Quelle est la dernière chose qui t'a fait vraiment rire ?",
+    "Si tu pouvais manger un seul plat pour le reste de ta vie, lequel ce serait ?",
+    "Tu es plutôt lève-tôt ou couche-tard ?",
+    "Quelle chanson tu pourrais écouter en boucle sans t'en lasser ?",
+    "Quel est ton endroit préféré dans ta ville ?",
+    "Si tu avais une journée entière sans aucune obligation, tu ferais quoi ?",
+    "Quel talent inutile est-ce que tu as ?",
+    "Tu préfères la mer ou la montagne ? Pourquoi ?",
+    "Quel est le dernier film ou la dernière série que tu as adoré ?",
+    "Quelle appli tu ouvres le plus souvent sur ton téléphone ?",
+    "Si tu pouvais avoir un super-pouvoir, lequel choisirais-tu ?",
+    "Quel est ton petit plaisir du quotidien ?",
+    "Chats, chiens, ou aucun des deux ?",
+    "Quel métier rêvais-tu de faire quand tu étais petit·e ?",
+    "Quel est le meilleur cadeau que tu aies jamais reçu ?"
+  ],
+  "Souvenirs": [
+    "Quel est ton plus beau souvenir d'enfance ?",
+    "Quel voyage t'a le plus marqué·e ?",
+    "Raconte-moi un moment où tu as eu très peur.",
+    "Quelle est la plus grosse bêtise que tu aies faite enfant ?",
+    "Quel prof ou quelle personne t'a vraiment influencé·e en grandissant ?",
+    "Quel est le meilleur repas que tu aies jamais mangé, et avec qui ?",
+    "Quelle période de ta vie aimerais-tu revivre ?",
+    "Quel livre, film ou chanson a compté à un moment précis de ta vie ?",
+    "Quelle tradition familiale tu aimes le plus ?",
+    "Quel est ton souvenir le plus drôle avec un·e ami·e ?",
+    "Quelle a été ta première grande fierté ?",
+    "Y a-t-il une odeur qui te ramène immédiatement quelque part ?"
+  ],
+  "Qui tu es": [
+    "Qu'est-ce que les gens se trompent souvent à ton sujet ?",
+    "Comment tes ami·es proches te décriraient en trois mots ?",
+    "Qu'est-ce qui te donne de l'énergie, et qu'est-ce qui t'en enlève ?",
+    "De quoi es-tu le plus fier ou la plus fière aujourd'hui ?",
+    "Qu'est-ce qui te met en colère plus que ça ne devrait ?",
+    "Comment tu te ressources après une semaine difficile ?",
+    "Tu es plutôt du genre à planifier ou à improviser ?",
+    "Quelle qualité tu admires le plus chez les autres ?",
+    "Quel défaut tu essaies de corriger chez toi ?",
+    "Qu'est-ce qui te rend vraiment heureux ou heureuse ?",
+    "Dans quelle situation tu te sens le plus toi-même ?",
+    "Quelle est une opinion que tu as et que peu de gens partagent ?",
+    "Comment montres-tu aux gens que tu tiens à eux ?"
+  ],
+  "Plus profond": [
+    "Qu'est-ce qui compte le plus pour toi dans la vie ?",
+    "Quelle est la meilleure décision que tu aies prise ?",
+    "Y a-t-il quelque chose que tu regrettes de ne pas avoir fait ?",
+    "Qu'est-ce qui t'a fait changer d'avis sur quelque chose d'important ?",
+    "De quoi as-tu peur, vraiment ?",
+    "Quelle leçon as-tu apprise à la dure ?",
+    "Qu'est-ce que tu aimerais dire à toi-même il y a dix ans ?",
+    "Qu'est-ce que l'amitié veut dire pour toi ?",
+    "Quand t'es-tu senti·e le plus seul·e, et qu'est-ce qui t'a aidé·e ?",
+    "Qu'est-ce que tu voudrais que les gens retiennent de toi ?",
+    "Quelle épreuve t'a rendu·e plus fort·e ?",
+    "Qu'est-ce qui te fait te sentir en sécurité ?"
+  ],
+  "Rêves et projets": [
+    "Où te vois-tu dans cinq ans ?",
+    "Si l'argent n'était pas un problème, que ferais-tu de ta vie ?",
+    "Quel pays rêves-tu de visiter, et pourquoi celui-là ?",
+    "Qu'est-ce que tu aimerais apprendre cette année ?",
+    "Quel projet te trotte dans la tête depuis longtemps ?",
+    "À quoi ressemblerait ta journée idéale dans dix ans ?",
+    "Y a-t-il une cause qui te tient particulièrement à cœur ?",
+    "Si tu pouvais changer une chose dans le monde, ce serait quoi ?",
+    "Quel est un petit objectif que tu aimerais atteindre ce mois-ci ?",
+    "Qu'est-ce que tu n'as jamais osé essayer, mais qui te tente ?"
+  ],
+  "Imagine…": [
+    "Tu peux dîner avec n'importe qui, vivant ou non. Qui choisis-tu ?",
+    "Tu peux vivre à n'importe quelle époque pendant un an. Laquelle ?",
+    "Ta vie devient un film : quel en est le titre ?",
+    "Tu dois partir sur une île déserte avec trois objets. Lesquels ?",
+    "Tu peux maîtriser instantanément une compétence. Laquelle ?",
+    "Tu gagnes un million d'euros demain. Quelle est la première chose que tu fais ?",
+    "Tu peux parler à ton toi de 80 ans. Que lui demandes-tu ?",
+    "Tu peux vivre une journée dans la peau de quelqu'un d'autre. Qui ?",
+    "Tu ouvres un petit commerce. Qu'est-ce que tu vends ?",
+    "Tu peux supprimer une invention de l'histoire. Laquelle ?"
+  ]
+};
+
+const ALL = "Tous les thèmes";
+let active = ALL;
+let deck = [];
+let history = [];
+let pos = -1;
+let busy = false;
+
+const $ = id => document.getElementById(id);
+const card = $("card"), tagEl = $("tag"), qEl = $("question"), countEl = $("count");
+const nextBtn = $("next"), prevBtn = $("prev");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function pool() {
+  if (active === ALL) {
+    return Object.entries(THEMES).flatMap(([t, qs]) => qs.map(q => ({ t, q })));
+  }
+  return THEMES[active].map(q => ({ t: active, q }));
+}
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function resetDeck() {
+  deck = shuffle(pool());
+  history = [];
+  pos = -1;
+}
+
+function show(item) {
+  tagEl.textContent = item.t;
+  qEl.textContent = item.q;
+  qEl.classList.remove("intro");
+  const total = pool().length;
+  countEl.textContent = `Question ${pos + 1} sur ${total}`;
+  prevBtn.disabled = pos <= 0;
+}
+
+function swap(render, dir) {
+  if (busy) return;
+  if (reduceMotion || pos < 0 && history.length === 0) { render(); return; }
+  busy = true;
+  const cls = dir === "right" ? "leave-right" : "leave";
+  card.classList.add(cls);
+  setTimeout(() => {
+    card.classList.remove(cls);
+    render();
+    card.classList.add("enter");
+    setTimeout(() => { card.classList.remove("enter"); busy = false; }, 420);
+  }, 300);
+}
+
+function next() {
+  if (busy) return;
+  const first = history.length === 0;
+  if (pos < history.length - 1) {
+    pos++;
+    swap(() => show(history[pos]));
+    return;
+  }
+  if (deck.length === 0) {
+    swap(() => {
+      tagEl.textContent = "Paquet terminé";
+      qEl.textContent = "Vous avez fait le tour de toutes les questions. Appuyez à nouveau pour mélanger le paquet et recommencer.";
+      qEl.classList.add("intro");
+      countEl.textContent = "";
+      prevBtn.disabled = true;
+      resetDeck();
+    });
+    return;
+  }
+  const item = deck.pop();
+  history.push(item);
+  pos++;
+  if (first) {
+    nextBtn.textContent = "Question suivante";
+    card.classList.add("enter");
+    show(item);
+    setTimeout(() => card.classList.remove("enter"), 420);
+  } else {
+    swap(() => show(item));
+  }
+}
+
+function prev() {
+  if (busy || pos <= 0) return;
+  pos--;
+  swap(() => show(history[pos]), "right");
+}
+
+function buildFilters() {
+  const wrap = $("filters");
+  [ALL, ...Object.keys(THEMES)].forEach(name => {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = name;
+    b.setAttribute("aria-pressed", name === active);
+    b.addEventListener("click", () => {
+      if (active === name) return;
+      active = name;
+      wrap.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+      resetDeck();
+      tagEl.textContent = name;
+      qEl.textContent = "Nouveau paquet mélangé. Tirez une question.";
+      qEl.classList.add("intro");
+      countEl.textContent = `${pool().length} questions`;
+      prevBtn.disabled = true;
+      nextBtn.textContent = "Tirer une question";
+    });
+    wrap.appendChild(b);
+  });
+}
+
+nextBtn.addEventListener("click", next);
+let sx = 0, sy = 0, touched = false;
+card.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; touched = true; }, { passive: true });
+card.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { dx < 0 ? next() : prev(); }
+  else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) { next(); }
+  setTimeout(() => touched = false, 400);
+});
+card.addEventListener("click", () => { if (!touched) next(); });
+if (window.matchMedia("(hover: hover)").matches) {
+  document.getElementById("hint").textContent = "Cliquez sur la carte ou appuyez sur Espace pour changer de question.";
+}
+prevBtn.addEventListener("click", prev);
+document.addEventListener("keydown", e => {
+  if (e.target.closest && e.target.closest("button")) return;
+  if (e.code === "Space" || e.key === "ArrowRight") { e.preventDefault(); next(); }
+  if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+});
+
+buildFilters();
+resetDeck();
+</script>
+</body>
+</html>
