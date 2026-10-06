@@ -214,12 +214,6 @@ const THEMES = {
     "Tu peux parler à toi-même à 80 ans. Qu'est-ce que tu lui demandes ?"
   ]
 };
-const PINNED = [
-  { pos: 4, q: "C'est quoi ton pire date ?" },
-  { pos: 8,  q: "Ton plus gros red flag chez quelqu'un ? Et ton green flag ?" },
-  { pos: 12,  q: "Pour toi, c'est quoi la meilleure activité à faire en date ?" },
-  { pos: 16, q: "Tu es plutôt attirée par les gens qui te ressemblent, ou par ton opposé ?" }
-];
 
 const ALL = "Tous les thèmes";
 let active = ALL;
@@ -239,6 +233,7 @@ function pool() {
   }
   return THEMES[active].map(q => ({ t: active, q }));
 }
+
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -246,20 +241,9 @@ function shuffle(a) {
   }
   return a;
 }
+
 function resetDeck() {
-  let cards = pool();
-  if (active === ALL) {
-    const pinnedTexts = PINNED.map(p => p.q);
-    const pinnedCards = cards.filter(c => pinnedTexts.includes(c.q));
-    cards = shuffle(cards.filter(c => !pinnedTexts.includes(c.q)));
-    PINNED.forEach(p => {
-      const card = pinnedCards.find(c => c.q === p.q);
-      if (card) cards.splice(p.pos - 1, 0, card);
-    });
-  } else {
-    cards = shuffle(cards);
-  }
-  deck = cards.reverse();
+  deck = shuffle(pool());
   history = [];
   pos = -1;
 }
